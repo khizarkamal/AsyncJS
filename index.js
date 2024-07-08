@@ -5,6 +5,7 @@ const superAgent = require("superagent");
 
 // Async Version 
 
+// Handing Return Values of Promises
 
 const readFilePro = () => {
     return new Promise((resolve,reject)=>{
@@ -42,8 +43,10 @@ const getDogPic = async () => {
     }
     catch(err){
         console.log("Error---",err);
+        throw err;
     }
-    console.log("Async")
+    // Return Values from async functions
+    return "Ready Async Function";
 }
 
 // Chainoing multiple Promises
@@ -64,6 +67,27 @@ const getDogPic = async () => {
 //         console.log("err-",err);
 //     })
 
-console.log("Before");
-getDogPic();
-console.log("After")
+
+// Promises with then catch syntax
+
+// console.log("Before");
+// getDogPic().then((res)=>{
+//     console.log(res);
+//     console.log("After");
+// }).catch((err)=>{
+//     console.log("ERROR----")
+// });
+
+
+// IIFE SYNTAX USED TO RETURN OF ASYNC AWAIT
+(async ()=> {
+    try {
+        console.log("Before");
+        const response = await getDogPic();
+        console.log(response);
+        console.log("After");
+    }
+    catch(err){
+        console.log("ERROR----")
+    }
+})()
