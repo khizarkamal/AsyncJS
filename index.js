@@ -2,7 +2,7 @@ const fs = require("fs");
 const superAgent = require("superagent");
 
 // Converting Callbacks to promises
-
+// Consuming promises using .then and catch
 // Async Version 
 
 
