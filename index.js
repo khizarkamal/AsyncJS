@@ -29,20 +29,41 @@ const writeFilePro = (file, data)=> {
     })
 }
 
+
+
+// ASYNC AWAIT
+
+const getDogPic = async () => {
+   
+    try{
+        const breed = await readFilePro();
+        const res =  await superAgent(`https://dog.ceo/api/breed/${breed}/images/random`);
+        await writeFilePro('dog-image.txt', res.body.message);
+    }
+    catch(err){
+        console.log("Error---",err);
+    }
+    console.log("Async")
+}
+
 // Chainoing multiple Promises
 
-readFilePro()
-    .then((res)=>{
-        // Returnig a promise
-        return superAgent(`https://dog.ceo/api/breed/${res}/images/random`)
-    })
-        .then((res)=>{
-            return writeFilePro('dog-image.txt',res.body.message);
-        })
-        .then((res)=>{
-            console.log(res);
-        })
-    .catch((err)=>{
-        console.log("Unable to load data from api");
-        console.log("err-",err);
-    })
+// readFilePro()
+//     .then((res)=>{
+//         // Returnig a promise
+//         return superAgent(`https://dog.ceo/api/breed/${res}/images/random`)
+//     })
+//         .then((res)=>{
+//             return writeFilePro('dog-image.txt',res.body.message);
+//         })
+//         .then((res)=>{
+//             console.log(res);
+//         })
+//     .catch((err)=>{
+//         console.log("Unable to load data from api");
+//         console.log("err-",err);
+//     })
+
+console.log("Before");
+getDogPic();
+console.log("After")
