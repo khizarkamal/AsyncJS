@@ -1,29 +1,48 @@
 const fs = require("fs");
 const superAgent = require("superagent");
 
-// Converting Callbacks to promises
-// Consuming promises using .then and catch
+// Creating Promises And Chainging them
+
 // Async Version 
 
 
-fs.readFile(`${__dirname}/dog.txt`,"utf-8",(err,data)=>{
-   if(err){
-    console.log("Error while trying to read the file");  
-    return;
-   }
-    superAgent(`https://dog.ceo/api/breed/${data}/images/random`)
-    // Promise Fullfilled
-    .then((res)=>{
-            fs.writeFile('dog-image.txt',res.body.message,(err)=>{
-                if(err){
-                    console.log("Unable to write to the file");
-                    return ;
-                }
-                console.log("Random Image saved to file");
-        });
+const readFilePro = () => {
+    return new Promise((resolve,reject)=>{
+        fs.readFile(`${__dirname}/dog.txt`,'utf-8',(err,data)=>{
+            if(err){
+                console.log("err--",err);
+                reject("Unable to read file ");
+            }
+            resolve(data);
+        })
     })
-    // Promise Rejected
+}
+
+const writeFilePro = (file, data)=> {
+    return new Promise((resolve, reject)=>{
+        fs.writeFile(file, data,(err)=>{
+            if(err){
+                reject("Couldnt write the file");
+            }
+            resolve("Success");
+        })
+    })
+}
+
+// Chainoing multiple Promises
+
+readFilePro()
+    .then((res)=>{
+        // Returnig a promise
+        return superAgent(`https://dog.ceo/api/breed/${res}/images/random`)
+    })
+        .then((res)=>{
+            return writeFilePro('dog-image.txt',res.body.message);
+        })
+        .then((res)=>{
+            console.log(res);
+        })
     .catch((err)=>{
         console.log("Unable to load data from api");
+        console.log("err-",err);
     })
-})
