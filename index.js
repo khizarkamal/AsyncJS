@@ -38,8 +38,14 @@ const getDogPic = async () => {
    
     try{
         const breed = await readFilePro();
-        const res =  await superAgent(`https://dog.ceo/api/breed/${breed}/images/random`);
-        await writeFilePro('dog-image.txt', res.body.message);
+        // HANDLING MULTIPLE PROMISES
+        const res1 =  superAgent(`https://dog.ceo/api/breed/${breed}/images/random`);
+        const res2 =  superAgent(`https://dog.ceo/api/breed/${breed}/images/random`);
+        const res3 =  superAgent(`https://dog.ceo/api/breed/${breed}/images/random`);
+        const allResponses = await Promise.all([res1,res2,res3]);
+        const randomImages = allResponses.map((el)=>el.body.message);
+        console.log(randomImages);
+        await writeFilePro('dog-image.txt', randomImages.join("\n"));
     }
     catch(err){
         console.log("Error---",err);
